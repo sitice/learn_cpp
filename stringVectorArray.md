@@ -80,5 +80,4 @@ int *last = end(ia);
 ```c
 int int_arr[]{0,1,2,3,4,5}
 vector<int> ivec(begin(int_arr), end(int_arr))
-1
 ```
