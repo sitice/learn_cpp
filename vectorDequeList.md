@@ -122,3 +122,79 @@ vector<Sales_data> a,b;
 
 if(a < b)//错误，Sales_data没有<运算符
 ```
+
+## 向顺序容器添加元素
+
+![](2022-09-11-20-05-15.png)
+
+### emplace操作
+
+```cpp
+vector<Sales_data> a;
+
+a.emplace_back("978-0590353403",25,15.99);//可以直接构造Sales_data
+
+a.emplace_back();//使用Sales_data的默认构造函数
+
+a.push_back("978-0590353403",25,15.99)//错误
+```
+
+## 访问元素
+![](2022-09-11-20-11-30.png)
+
+> 访问元素返回的是引用
+
+## 删除元素
+
+![](2022-09-11-20-13-06.png)
+
+## 特殊的forward_list操作
+
+![](2022-09-12-10-58-06.png)
+
+## 改变容器大小
+
+
+```cpp
+list<int> ilist(10,20);//十个int：每个值都是42
+ilist.resize(15);//将五个值为0的元素添加到ilist的结尾
+ilist.resize(25,-1);//将10个值为-1的元素添加的ilist的结尾
+ilist.resize(5);//从ilist末尾删除20个元素
+```
+
+## 对容器操作可能导致迭代器失效
+
+对容器添加元素后
+* 对于vector和string，指向插入位置之前的元素迭代器、指针、引用有效，之后的无效
+
+* 对于deque，插入首尾之外位置的会导致迭代器、引用和指针失效，在首尾添加元素，只有迭代器会失效
+
+* 对于list和forward_list，指向容器的迭代器、引用和指针都有效
+  
+其他的看书
+
+### 不要保存end返回的迭代器
+
+```cpp
+auto begin = v.begin(),end = v.end();//不要保存尾迭代器
+//此循环时未定义的
+while(begin != end)
+{
+    ++begin;
+    begin = v.insert(begin,42);
+    ++begin; 
+}
+```
+会导致无限循环，添加元素使保存在end的迭代器失效
+
+更安全的方法
+```cpp
+auto begin = v.begin();
+
+while(begin != v.end())
+{
+    ++begin;
+    begin = v.insert(begin,42);
+    ++begin; 
+}
+```
